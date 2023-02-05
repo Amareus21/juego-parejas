@@ -1,11 +1,47 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from '@/styles/Home.module.css'
-
-const inter = Inter({ subsets: ['latin'] })
+import Head from "next/head";
+import styles from "@/styles/Home.module.css";
+import Row from "@/components/row";
+import { useEffect, useState } from "react";
+import Card from "@/components/card";
+import {getColorsRandom, colorsPrimary} from "@/utils/utils";
 
 export default function Home() {
+ 
+  const [primary, setPrimary] = useState(colorsPrimary);
+  const [secondari, setSecondary] = useState(getColorsRandom());
+  const [colorTocado, setColorTocado] = useState([]);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (count === 2) {
+      setTimeout(() => {
+        if (secondari[colorTocado[0]] === secondari[colorTocado[1]]) {
+          setCount(0);
+          setColorTocado([]);
+        } else {
+          setPrimary((prev) => {
+            const nuevo = [...prev];
+            nuevo[colorTocado[0]] = "black";
+            nuevo[colorTocado[1]] = "black";
+            return nuevo;
+          });
+          setCount(0);
+          setColorTocado([]);
+        }
+      }, 250);
+    }
+  }, [count]);
+
+  const handleClick = (e) => {
+    setPrimary((prev) => {
+      const nuevo = [...prev];
+      nuevo[e.target.id] = secondari[e.target.id];
+      return nuevo;
+    });
+    setColorTocado([...colorTocado, e.target.id]);
+    setCount(count + 1);
+    console.log(count);
+  };
   return (
     <>
       <Head>
@@ -15,109 +51,47 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>pages/index.js</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
+        {JSON.stringify(primary) == JSON.stringify(secondari) ? (
+          <>
+            <h1>Has Ganado Campeon</h1>
+            <button
+              onClick={() => {
+                setSecondary(getColorsRandom());
+                setPrimary(colorsPrimary);
+              }}
             >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
+              Nueva Partida
+            </button>
+          </>
+        ) : (
+          <div className={styles.game}>
+            <Row>
+              <Card id="0" color={primary[0]} handleClick={handleClick} />
+              <Card id="1" color={primary[1]} handleClick={handleClick} />
+              <Card id="2" color={primary[2]} handleClick={handleClick} />
+              <Card id="3" color={primary[3]} handleClick={handleClick} />
+            </Row>
+            <Row>
+              <Card id="4" color={primary[4]} handleClick={handleClick} />
+              <Card id="5" color={primary[5]} handleClick={handleClick} />
+              <Card id="6" color={primary[6]} handleClick={handleClick} />
+              <Card id="7" color={primary[7]} handleClick={handleClick} />
+            </Row>
+            <Row>
+              <Card id="8" color={primary[8]} handleClick={handleClick} />
+              <Card id="9" color={primary[9]} handleClick={handleClick} />
+              <Card id="10" color={primary[10]} handleClick={handleClick} />
+              <Card id="11" color={primary[11]} handleClick={handleClick} />
+            </Row>
+            <Row>
+              <Card id="12" color={primary[12]} handleClick={handleClick} />
+              <Card id="13" color={primary[13]} handleClick={handleClick} />
+              <Card id="14" color={primary[14]} handleClick={handleClick} />
+              <Card id="15" color={primary[15]} handleClick={handleClick} />
+            </Row>
           </div>
-        </div>
-
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-          <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
-          </div>
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
-        </div>
+        )}
       </main>
     </>
-  )
+  );
 }
